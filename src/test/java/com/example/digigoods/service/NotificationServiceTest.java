@@ -338,4 +338,48 @@ class NotificationServiceTest {
           () -> notificationService.areNotificationsEnabled(userId));
     }
   }
+
+  @Nested
+  @DisplayName("Error Handling Tests")
+  class ErrorHandlingTests {
+
+    @Test
+    @DisplayName("Given message too long, when processing notification, then throw NotificationException")
+    void givenMessageTooLong_whenProcessingNotification_thenThrowNotificationException() {
+      // Arrange
+      Long userId = 1L;
+      NotificationType type = NotificationType.ORDER_CONFIRMATION;
+      String longMessage = "a".repeat(1001); // Message longer than 1000 characters
+
+      when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
+
+      // Act & Assert
+      NotificationException exception = assertThrows(NotificationException.class,
+          () -> notificationService.sendNotification(userId, type, longMessage));
+      assertEquals("Failed to send notification to user: " + userId, exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Given exception during processing, when sending notification, then throw NotificationException")
+    void givenExceptionDuringProcessing_whenSendingNotification_thenThrowNotificationException() {
+      // Arrange
+      Long userId = 1L;
+      NotificationType type = NotificationType.ORDER_CONFIRMATION;
+      String message = "Test message";
+
+      // Mock user to throw exception during processing
+      User problematicUser = new User(userId, "testuser", "password") {
+        @Override
+        public String getUsername() {
+          throw new RuntimeException("Database connection error");
+        }
+      };
+
+      when(userRepository.findById(userId)).thenReturn(Optional.of(problematicUser));
+
+      // Act & Assert
+      assertThrows(RuntimeException.class,
+          () -> notificationService.sendNotification(userId, type, message));
+    }
+  }
 }

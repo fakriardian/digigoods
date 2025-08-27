@@ -32,6 +32,17 @@
     <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
     <checkstyle.version>10.26.1</checkstyle.version>
     <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+
+    <!-- SonarQube Properties -->
+    <sonar.projectKey>digigoods</sonar.projectKey>
+    <sonar.projectName>Digigoods API</sonar.projectName>
+    <sonar.projectVersion>0.0.1-SNAPSHOT</sonar.projectVersion>
+    <sonar.sources>src/main/java</sonar.sources>
+    <sonar.tests>src/test/java</sonar.tests>
+    <sonar.java.binaries>target/classes</sonar.java.binaries>
+    <sonar.java.test.binaries>target/test-classes</sonar.java.test.binaries>
+    <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    <sonar.java.checkstyle.reportPaths>target/checkstyle-result.xml</sonar.java.checkstyle.reportPaths>
   </properties>
   <dependencies>
     <dependency>
@@ -250,6 +261,13 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+
+      <!-- SonarQube Maven Plugin for Code Quality Analysis -->
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>4.0.0.4121</version>
       </plugin>
     </plugins>
   </build>
