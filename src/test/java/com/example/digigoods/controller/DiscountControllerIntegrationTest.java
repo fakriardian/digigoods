@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.digigoods.model.Discount;
 import com.example.digigoods.model.DiscountType;
 import com.example.digigoods.repository.DiscountRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -38,9 +37,6 @@ class DiscountControllerIntegrationTest {
   private WebApplicationContext webApplicationContext;
 
   private MockMvc mockMvc;
-
-  @Autowired
-  private ObjectMapper objectMapper;
 
   @Autowired
   private DiscountRepository discountRepository;
@@ -83,7 +79,7 @@ class DiscountControllerIntegrationTest {
   void givenDiscountsInDatabase_whenGettingAllDiscounts_thenReturnDiscountsList() throws Exception {
     // Act & Assert
     mockMvc.perform(get("/discounts")
-            .contentType(MediaType.APPLICATION_JSON))
+        .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$").isArray())
@@ -108,10 +104,20 @@ class DiscountControllerIntegrationTest {
 
     // Act & Assert
     mockMvc.perform(get("/discounts")
-            .contentType(MediaType.APPLICATION_JSON))
+        .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$.length()").value(0));
+  }
+
+  @Test
+  @DisplayName("Given discounts endpoint, when making GET request, then return valid response")
+  void givenDiscountsEndpoint_whenMakingGetRequest_thenReturnValidResponse() throws Exception {
+    // Act & Assert
+    mockMvc.perform(get("/discounts")
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON));
   }
 }

@@ -8,6 +8,9 @@ import com.example.digigoods.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,6 +21,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class NotificationService {
+
+  private static final Logger logger = LoggerFactory.getLogger(NotificationService.class);
 
   private final UserRepository userRepository;
 
@@ -34,7 +39,8 @@ public class NotificationService {
    * @return notification response with status
    * @throws NotificationException if user not found or notification fails
    */
-  public NotificationResponse sendNotification(Long userId, NotificationType type, String message) {
+  public NotificationResponse sendNotification(@NonNull Long userId, @NonNull NotificationType type,
+      @NonNull String message) {
     // Arrange - validate input parameters
     validateNotificationInput(userId, type, message);
 
@@ -167,15 +173,28 @@ public class NotificationService {
 
   private boolean processNotification(User user, NotificationType type, String message,
       String notificationId) {
-    // Simulate notification processing
-    // In real implementation, this would integrate with email service, SMS service,
-    // etc.
+    try {
+      // Simulate notification processing
+      // In real implementation, this would integrate with email service, SMS service,
+      // etc.
 
-    // Log the notification (in real implementation, save to database)
-    System.out.printf("Sending %s notification to user %s: %s (ID: %s)%n",
-        type, user.getUsername(), message, notificationId);
+      // Log the notification (in real implementation, save to database)
+      logger.info("Sending {} notification to user {}: {} (ID: {})",
+          type, user.getUsername(), message, notificationId);
 
-    // Simulate success (in real implementation, handle actual sending logic)
-    return true;
+      // Simulate potential failure scenarios (for demonstration)
+      if (message.length() > 1000) {
+        logger.warn("Notification message too long for user {}: {} characters",
+            user.getUsername(), message.length());
+        return false;
+      }
+
+      // Simulate success (in real implementation, handle actual sending logic)
+      return true;
+    } catch (Exception e) {
+      logger.error("Failed to process notification for user {}: {}",
+          user.getUsername(), e.getMessage(), e);
+      return false;
+    }
   }
 }

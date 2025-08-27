@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.digigoods.model.Product;
 import com.example.digigoods.repository.ProductRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,9 +34,6 @@ class ProductControllerIntegrationTest {
   private WebApplicationContext webApplicationContext;
 
   private MockMvc mockMvc;
-
-  @Autowired
-  private ObjectMapper objectMapper;
 
   @Autowired
   private ProductRepository productRepository;
@@ -72,7 +68,7 @@ class ProductControllerIntegrationTest {
   void givenProductsInDatabase_whenGettingAllProducts_thenReturnProductsList() throws Exception {
     // Act & Assert
     mockMvc.perform(get("/products")
-            .contentType(MediaType.APPLICATION_JSON))
+        .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$").isArray())
@@ -95,7 +91,7 @@ class ProductControllerIntegrationTest {
 
     // Act & Assert
     mockMvc.perform(get("/products")
-            .contentType(MediaType.APPLICATION_JSON))
+        .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$").isArray())
